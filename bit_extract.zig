@@ -57,7 +57,8 @@ pub fn BitIndexType(comptime BaseType: type) type {
 // This is likely very wasteful, generating a lot of code at a call site, although
 // I haven't done any measurements to see how it effect compilation time..
 pub fn extractBits(bits: anytype, bit_offset: BitIndexType(@TypeOf(bits)), field_width_bits: BitIndexType(@TypeOf(bits))) u64 {
-    @setEvalBranchQuota(64 * 64 * 2);
+    // I'm actually not sure why this is the right number, but this is how many branches are generated.
+    @setEvalBranchQuota(2 << 12);
 
     const size = @sizeOf(@TypeOf(bits));
     switch (field_width_bits) {
