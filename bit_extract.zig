@@ -17,6 +17,9 @@ pub fn main() void {
     std.debug.print("0x{X}\n", .{extractBits(bits, 56, 16)});
     // Equivalent to:
     std.debug.print("0x{X}\n", .{(bits >> 56) & 0xFFFFFFFF});
+
+    var bits_u3: u3 = 1;
+    std.debug.print("0x{X}\n", .{extractBits(bits_u3, 0, 1)});
 }
 
 // ctz cannot be used within a function signature as it doesn't accept comptime_int.
@@ -24,6 +27,9 @@ pub fn main() void {
 // Perhaps @ctz(@as(u64, @bitSizeOf(@TypeOf(bits)))) would also work...
 pub fn BitIndexType(comptime BaseType: type) type {
     const base_type_size_bytes: u64 = @bitSizeOf(BaseType);
+    if (@popCount(base_type_size_bytes) != 1) {
+        @compileError("extractBits cannot handle integer sizes that are not powers of 2!");
+    }
     const trailing_zeros: u64 = @ctz(base_type_size_bytes);
     return Int(unsigned, trailing_zeros);
 }
