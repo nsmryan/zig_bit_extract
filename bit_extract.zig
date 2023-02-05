@@ -4,13 +4,19 @@ const unsigned = std.builtin.Signedness.unsigned;
 
 pub fn main() void {
     // A sample integer to pull bits from:
-    var bits: u64 = 0x01234567890123456;
+    var bits: u64 = 0x0123456789012345;
 
     // Pull each 16 bit subsection of the u64 as a test.
     std.debug.print("0x{X}\n", .{extractBits(bits, 0, 16)});
     std.debug.print("0x{X}\n", .{extractBits(bits, 16, 16)});
     std.debug.print("0x{X}\n", .{extractBits(bits, 32, 16)});
     std.debug.print("0x{X}\n", .{extractBits(bits, 48, 16)});
+
+    // Surprisingly this works, but seems to get 0s for missing bits...
+    // Instead it results in '0x01', which is the high byte.
+    std.debug.print("0x{X}\n", .{extractBits(bits, 56, 16)});
+    // Equivalent to:
+    std.debug.print("0x{X}\n", .{(bits >> 56) & 0xFFFFFFFF});
 }
 
 // ctz cannot be used within a function signature as it doesn't accept comptime_int.
