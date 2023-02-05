@@ -18,8 +18,9 @@ pub fn main() void {
     // Equivalent to:
     std.debug.print("0x{X}\n", .{(bits >> 56) & 0xFFFFFFFF});
 
-    var bits_u3: u3 = 1;
-    std.debug.print("0x{X}\n", .{extractBits(bits_u3, 0, 1)});
+    // Crashes with a compile error message about needing a power of 2 byte size.
+    //var bits_u3: u3 = 1;
+    //std.debug.print("0x{X}\n", .{extractBits(bits_u3, 0, 1)});
 }
 
 // ctz cannot be used within a function signature as it doesn't accept comptime_int.
